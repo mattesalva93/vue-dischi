@@ -34,15 +34,17 @@ export default {
   methods: {
     getDischi(){
         axios
-            .get(this.apiURL)
+            .get(this.apiUrl)
             .then( (risposta) => {
                 // handle success
                 this.dischiArray = risposta.data.response;
+                console.log(risposta.data.response)
             })
             .catch(function (error) {
                 // handle error
                 console.log(error);
-            });
+            })
+            ;
         }
     }
 }
