@@ -1,10 +1,10 @@
 <template>
   <div class="col d-flex px-4">
     <div class="ms_disco-box">
-      <img src="https://www.onstageweb.com/wp-content/uploads/2018/09/bon-jovi-new-jersey.jpg" alt="">
-      <h3>Titolo</h3>
-      <span> autore </span>
-      <span> anno </span>
+      <img src="disco.poster" alt="disco.poster">
+      <h3>disco.title</h3>
+      <span> disco.author </span>
+      <span> disco.year </span>
     </div>
   </div>
 </template>
@@ -12,6 +12,9 @@
 <script>
 export default {
     name: 'Disco-singolo',
+    props: {
+      disco: Object
+    }
 }
 </script>
 
