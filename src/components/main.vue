@@ -2,16 +2,21 @@
   <main>
     <div class="container p-5">
       <div class="row">
-        <genre-select 
-        @filtra="getGenre"
+        <filter-select 
+        @filtra="getFilter"
+        :listageneri="listaGeneri"
         />
       </div>
-      <div class="row row-cols-5">
+      <div v-if="!loading" class="row row-cols-5">
         <disco-singolo
          v-for="(element, index) in genereFiltrato"
          :key="index"
          :disco="element" />
-
+      </div>
+      <div v-else class="row row-cols-5">
+        <div class="col-12 d-flex justify-content-center align-items-center">
+          loading...
+        </div>
       </div>
     </div>
   </main>
@@ -19,31 +24,41 @@
 
 <script>
 import discoSingolo from './sub-components/Disco-singolo.vue'
-import GenreSelect from './sub-components/Genre-select.vue';
+import filterSelect from './sub-components/Filter-select.vue';
 import axios from 'axios';
 
 export default {
   name: 'Main',
   components: { 
     discoSingolo,
-    GenreSelect 
+    filterSelect,
     },
   data(){
     return{
       apiUrl: "https://flynn.boolean.careers/exercises/api/array/music",
       dischiArray: [],
       genereSelezionato: "",
+      loading: true,
     }
   },
   created(){
     this.getDischi();
   }, 
   computed: {
+    listaGeneri(){
+      const generiFiltrati = [];
+      this.dischiArray.forEach(element => {
+        if(!generiFiltrati.includes(element.genre))
+        generiFiltrati.push(element.genre);
+      });
+      return generiFiltrati;
+
+    },
     genereFiltrato(){
       return this.dischiArray.filter( (element) => {
         return element.genre.includes(this.genereSelezionato);
       });
-    }
+    },
   },
   methods: {
     getDischi(){
@@ -52,6 +67,7 @@ export default {
             .then( (risposta) => {
                 // handle success
                 this.dischiArray = risposta.data.response;
+                this.loading = false;
             })
             .catch(function (error) {
                 // handle error
@@ -59,10 +75,10 @@ export default {
             })
             ;
         },
-    getGenre(genreSelected){
-      this.genereSelezionato = genreSelected;
-      console.log(this.genereSelezionato);
-    }
+    getFilter(genreSelected){
+        this.genereSelezionato = genreSelected;
+        console.log(this.genereSelezionato);
+    },
     }
 }
 
